@@ -5,7 +5,8 @@
   "description": "選択したテキストを柔らかく言い換えるChrome拡張機能",
   "permissions": [
     "activeTab",
-    "contextMenus"
+    "contextMenus",
+    "storage"
   ],
   "background": {
     "scripts": ["background.js"],
@@ -16,5 +17,6 @@
       "matches": ["<all_urls>"],
       "js": ["content.js"]
     }
-  ]
+  ],
+  "options_page": "options.html"
 }
