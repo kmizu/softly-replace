@@ -1,2 +1,7 @@
 # sftly-replace
-A Chrome extention to replace the selected text softly
+
+選択された範囲のテキストを「柔らかく言い換える」Chrome拡張です。
+
+とりあえず手元で動いたという程度です。使ってみたい方はコード中の
+
+`API_KEY` の値を書き換えてください。
