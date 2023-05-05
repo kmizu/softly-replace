@@ -1,11 +1,25 @@
+function isTextInputElement(element) {
+    return element.tagName === 'TEXTAREA' || (element.tagName === 'INPUT' && element.type === 'text');
+}
+
 function replaceSelectedText(newText) {
-  const selection = window.getSelection();
-  if (!selection.rangeCount) return;
-  const range = selection.getRangeAt(0);
-  range.deleteContents();
-  const newNode = document.createTextNode(newText);
-  range.insertNode(newNode);
-  selection.removeAllRanges();
+  const activeElement = document.activeElement;
+
+  if(isTextInputElement(activeElement)) {
+    const start = activeElement.selectionStart;
+    const end = activeElement.selectionEnd;
+    const replacementText = newText;
+
+    const textBefore = activeElement.value.substring(0, start);
+    const textAfter = activeElement.value.substring(end);
+
+    activeElement.value = textBefore + replacementText + textAfter;
+    activeElement.focus();
+    activeElement.setSelectionRange(start, start + replacementText.length);
+  } else {
+    let selection = window.getSelection();
+    selection.baseNode.textContent = newText;
+  }
 }
 
 chrome.runtime.onMessage.addListener(function (request) {
@@ -51,8 +65,8 @@ chrome.runtime.onMessage.addListener(function (request) {
       .then(response => response.json())
       .then(data => {
         const softenedText = data.choices[0].message.content.trim();
-        replaceSelectedText(softenedText);
         document.body.removeChild(overlay);
+        replaceSelectedText(softenedText);
       })
       .catch(error => {
         console.error('Error:', error);
